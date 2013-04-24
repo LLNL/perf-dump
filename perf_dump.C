@@ -176,6 +176,11 @@ void append_row(hid_t dump_file_id, const string& event_name,
 // Dump out dataviz information to potentially multipe partial
 // dump files.
 static void dump(MPI_Comm comm) {
+   if (!dump_steps.empty() && !dump_steps.contains(step_count)) {
+      // skip dumping if we shouldn't dump this time step
+      return;
+   }
+
    hid_t dump_file_id;
    if (dump_file_name.empty()) {
       dump_file_name = get_dump_file("perf-dump");
@@ -225,7 +230,7 @@ EXTERN_C void pdump_init() {
    const vector<string>& event_names = event_set->event_names();
 
    if (rank == 0) {
-      cerr << "============== Dataviz module started ==============" << endl;
+      cerr << "============== perf_dump module started ============" << endl;
       cerr << "  Initialized PAPI with " << event_names.size() << " events:"
            << endl;
       cerr << "      ";

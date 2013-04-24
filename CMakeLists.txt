@@ -13,13 +13,16 @@ if(NOT HDF5_IS_PARALLEL)
     "This HDF5 is not parallel.  perf_dump requires parallel HDF5.")
 endif()
 
-add_library(perfdump SHARED perf_dump.C papi_utils.C)
+set(PERF_DUMP_SRCS perf_dump.C papi_utils.C)
+
+add_library(perfdump SHARED ${PERF_DUMP_SRCS})
 target_link_libraries(perfdump
   ${MPI_LIBRARIES} adept_utils papi hdf5)
 
 add_wrapped_file(pmpi_perf_dump.C pmpi_perf_dump.w)
-add_pnmpi_module(mod_perfdump pmpi_perf_dump.C)
-target_link_libraries(mod_perfdump adept_utils perfdump)
+
+add_library(pmpi_perfdump SHARED pmpi_perf_dump.C ${PERF_DUMP_SRCS})
+add_pnmpi_module(pnmpi_perfdump pmpi_perf_dump.C ${PERF_DUMP_SRCS})
 
 add_executable(test-perf-dump test_perf_dump.C)
 target_link_libraries(test-perf-dump ${MPI_LIBRARIES} perfdump ${HDF5_LIBRARIES})

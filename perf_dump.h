@@ -13,9 +13,6 @@
 // Location to put dumps.  Best if this is in a parallel file system.
 #define PDUMP_DUMP_DIR "PDUMP_DUMP_DIR"
 
-// Prefix for dump files, e.g. 'mydump' for 'mydump-0.h5', 'mydump-1.h5', etc.
-#define PDUMP_DUMP_NAME "PDUMP_DUMP_NAME"
-
 // List of PAPI event names to monitor, separated by ':'
 #define PDUMP_EVENTS "PDUMP_EVENTS"
 
