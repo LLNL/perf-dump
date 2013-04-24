@@ -4,9 +4,22 @@ Performance Dump Module (perf_dump)
 `libperfdump` is a tool for collecting counter data from all processes in a
 cluster and dumping counter values out to an HDF5 file with parallel I/O.
 
+Building
+-----------------
+Building with CMake is very simple, but you will need PAPI and HDF5. These
+are installed on the LLNL Linux clusters.  Try this:
+
+    HDF5=/usr/local/tools/hdf5-gnu-parallel-1.8.10
+    export CMAKE_PREFIX_PATH=$HDF5
+    cmake -DPAPI_PREFIX=/usr/local/tools/papi  ..
+    make
+
+If you do not set the CMAKE_PREFIX_PATH like this, FindHDF5 seems to prefer
+the builtin sequential HDF5 (i.e., no MPI), so you should be sure to set
+the HDF5 prefix this way.  PAPI should also be found automatically.
+
 Usage
 -----------------
-
 Here's example usage of perf_dump from really simple MPI program:
 
     int main(int argc, char **argv) {
