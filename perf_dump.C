@@ -156,16 +156,17 @@ void append_row(hid_t dump_file_id, const string& event_name,
    dims[1] += 1;  // add another time step
    H5Dset_extent(dataset_id, dims);
 
-   hsize_t start[]  = {rank, dims[1] - 1};
-   hsize_t stride[] = {1, 1};
-   hsize_t count[]  = {1, 1};
-   hsize_t block[]  = {1, 1};
-
-   H5Sselect_hyperslab(space_id, H5S_SELECT_SET, start, stride, count, block);
+   hsize_t start[]  = {rank, dims[1] - 2};
+	 hsize_t marray[] = {1};
 
    hid_t xfer_plist = H5Pcreate(H5P_DATASET_XFER);
    H5Pset_dxpl_mpio(xfer_plist, H5FD_MPIO_COLLECTIVE);
-   herr_t status = H5Dwrite(dataset_id, H5_COUNTER_TYPE, H5S_ALL, H5S_ALL,
+
+ 	 hid_t mid = H5Screate_simple(1, marray, NULL);
+
+	
+	 herr_t ret = H5Sselect_elements (space_id, H5S_SELECT_SET, 1, start);
+   herr_t status = H5Dwrite(dataset_id, H5_COUNTER_TYPE, mid, space_id,
                             xfer_plist, data);
    H5Dclose(dataset_id);
    H5Sclose(space_id);
@@ -176,10 +177,10 @@ void append_row(hid_t dump_file_id, const string& event_name,
 // Dump out dataviz information to potentially multipe partial
 // dump files.
 static void dump(MPI_Comm comm) {
-   if (!dump_steps.empty() && !dump_steps.contains(step_count)) {
-      // skip dumping if we shouldn't dump this time step
-      return;
-   }
+  //   if (!dump_steps.empty() && !dump_steps.contains(step_count)) {
+  //    // skip dumping if we shouldn't dump this time step
+  //    return;
+  // }
 
    hid_t dump_file_id;
    if (dump_file_name.empty()) {
