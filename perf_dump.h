@@ -27,6 +27,14 @@
 #define PDUMP_TIME_CHUNK "PDUMP_TIME_CHUNK"
 
 
+//
+// Below defines control Pcontrol semantics for PMPI perf dump
+//
+/// MPI_Pcontrol(2) indicates that we should stop current step
+/// and start a new one.
+#define PDUMP_PCONTROL_TIME_STEP_CODE 2
+
+
 EXTERN_C void pdump_init();
 
 EXTERN_C void pdump_start_step();

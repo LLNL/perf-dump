@@ -20,7 +20,14 @@ the HDF5 prefix this way.  PAPI should also be found automatically.
 
 Usage
 -----------------
-Here's example usage of perf_dump from really simple MPI program:
+
+There are actually two ways to use `perf_dump`.  They are:
+
+1. As an API
+2. As a PMPI or PnMPI module
+
+### perf-dump API
+Here's example usage of perf_dump directly from really simple MPI program:
 
     int main(int argc, char **argv) {
        MPI_Init(&argc, &argv);
@@ -54,11 +61,54 @@ Here's example usage of perf_dump from really simple MPI program:
        MPI_Finalize();
     }
 
-This example will record counter values for each time step and write them
-to a dataset in an hdf5 file called `perf-dump.h5`.
+### perf-dump PMPI or PnMPI module
+If you do not want to link to the perf-dump library directly, you can
+instrument your program with `MPI_Pcontrol(2)` calls to make it work
+transparently.  Here is an example of that:
 
-If you run the above program (which you can find in `test-perf-dump.C`),
-the output should look like this:
+    int main(int argc, char **argv) {
+       MPI_Init(&argc, &argv);
+
+       int rank;
+       MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+       vector<double> a(VEC_SIZE);
+       vector<double> b(VEC_SIZE);
+
+       srand(23578 * rank);
+       for (size_t step=0; step < MAX_STEP; step++) {
+          init_vector(a);
+          init_vector(b);
+          double d = dot(a, b);
+
+          double prod;
+          MPI_Reduce(&d, &prod, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+          MPI_Pcontrol(2);     // end last time step and start a new one.
+
+          if (rank == 0) {
+             cout << step << ":\t" << prod << endl;
+          }
+       }
+
+       // finish writing out performance data to disk
+       MPI_Finalize();
+    }
+
+Here, `MPI_Init` does the job of calling `pdump_init` and the first
+`pdump_start_step`.  `MPI_Pcontrol(2)` tells the tool library to call
+`pdump_end_step` to end the previous time step and `pdump_start_step`
+to start a new one.  `MPI_Finalize` will call `pdump_end_step` to end
+the last time step and it will call `pdump_finalize` to dump any
+remaining data to disk.
+
+### Output of perf-dump
+
+Both examples above will record counter values for each time step and
+write them to a dataset in an hdf5 file called `perf-dump.h5`.
+
+If you run either of the above programs (which you can find in
+`test-perf-dump.C` and test-perf-dump-pmpi.C), the output should look
+like this:
 
     $ env PDUMP_EVENTS=PAPI_L1_TCM srun -n 4 -ppdebug ./test-perf-dump
     ============== perf_dump module started ============
