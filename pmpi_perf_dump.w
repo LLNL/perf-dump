@@ -5,10 +5,6 @@
 
 {{fn fun MPI_Init}} {
   {{callfn}}
-
-
-  std::cerr << "initing!" << std::endl;
-
   pdump_init();
   pdump_start_step();
 } {{endfn}}

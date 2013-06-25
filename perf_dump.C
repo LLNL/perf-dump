@@ -21,9 +21,6 @@ using namespace std;
 using namespace stringutils;
 using namespace io_utils;
 
-// default time chunk size
-static const hsize_t PDUMP_DEFAULT_TIME_CHUNK = 32;
-
 // Number of time steps encountered so far.
 static int step_count = 0;
 
@@ -219,8 +216,6 @@ static void print_comma_separated(Iterable elements, ostream& out) {
 // TODO: allow environment options to be set from PnMPI arguments as well.
 //
 EXTERN_C void pdump_init() {
-  cerr << "pdump_init" << endl;
-
   int rank, size;
   PMPI_Comm_rank(MPI_COMM_WORLD, &rank);
   PMPI_Comm_size(MPI_COMM_WORLD, &size);
@@ -251,7 +246,6 @@ EXTERN_C void pdump_init() {
 EXTERN_C void pdump_start_step() {
   int rank;
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-  cerr << rank << " start" << endl;
   event_set->start();
 }
 
@@ -263,7 +257,6 @@ EXTERN_C void pdump_end_step() {
 
   int rank;
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-  cerr << rank << " end" << endl;
 }
 
 
