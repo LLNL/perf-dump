@@ -46,8 +46,9 @@ def project(step_data_1d, dims):
     new_arr.flat = step_data_1d
     return new_arr
 
-def heat_map(axes, arr, color_map):
-    axes.imshow(arr, cmap=color_map, interpolation='nearest')
+def heat_map(axes, arr, color_map, vmin, vmax):
+    axes.imshow(arr, cmap=color_map, vmin=vmin, vmax=vmax,
+                interpolation='nearest')
     nrows, ncols = arr.shape
     def format_coord(x, y):
         col = int(x+0.5)
@@ -78,10 +79,13 @@ def plot_dataset(dataset):
 
     step_arrays = [project(dataset[:,s], dims) for s in timesteps]
 
+    vmin = dataset.value.min()
+    vmax = dataset.value.max()
+
     fig = plt.figure()
     for i, arr in enumerate(step_arrays):
         ax = fig.add_subplot(1, len(step_arrays), i)
-        heat_map(ax, arr, cm.Blues)
+        heat_map(ax, arr, cm.Blues, vmin, vmax)
 
     fig.canvas.set_window_title(dataset.name)
     fig.show()
