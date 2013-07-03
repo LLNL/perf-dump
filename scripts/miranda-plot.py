@@ -4,7 +4,11 @@ Plot some time steps from a perf-dump file output from Miranda.
 
 e.g., for a 256-process Miranda run, you could do this:
 
-  ./miranda-plot.py perf-dump.h5 8x32 0 1 2 3
+  ./miranda-plot.py perf-dump.h5 8x32
+
+or you could specify particular time steps:
+
+  ./miranda-plot.py perf-dump.h5 8x32 -t 0 1 2
 
 The parameters are:
    perf-dump-file    File containing performance data.
@@ -30,12 +34,10 @@ def die(msg):
 parser = argparse.ArgumentParser(description='Open perf-dump files from Miranda.')
 parser.add_argument('h5file', help=".h5 file from perf-dump")
 parser.add_argument('dims', help='Dimensions to project the matrix onto, e.g. 2x2')
-parser.add_argument('steps', type=int, nargs=argparse.REMAINDER,
-                    help='Steps to plot, e.g. 0 1 2 3 or 0 2 4')
+parser.add_argument(
+    '-t', '--timesteps', dest='timesteps', type=int, nargs='+',
+    help='Time steps to plot, e.g. 0 1 2 3 or 0 2 4. By default all steps are rendered')
 args = parser.parse_args()
-
-if not args.steps:
-    die('You must specify some time steps to render')
 
 
 def project(step_data_1d, dims):
@@ -61,16 +63,20 @@ def heat_map(axes, arr, color_map):
 
 def plot_dataset(dataset):
     ranks, steps = dataset.shape
-    for step in args.steps:
-        if step >= steps:
-            die("Time step %d is not in the data set %s"
-                % (step, dataset.name))
+
+    if args.timesteps:
+        timesteps = args.timesteps
+        if not all(0 <= s < steps for s in timesteps):
+            die("All time steps must be in the data set.  Range is [0..%s]"
+                % (len(args.steps)-1))
+    else:
+        timesteps = xrange(steps)
 
     dims = [int(d) for d in args.dims.split('x')]
     if reduce(lambda x,y: x*y, dims, 1) != ranks:
         die("Product of dimensions must equal number of ranks.")
 
-    step_arrays = [project(dataset[:,s], dims) for s in args.steps]
+    step_arrays = [project(dataset[:,s], dims) for s in timesteps]
 
     fig = plt.figure()
     for i, arr in enumerate(step_arrays):
