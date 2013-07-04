@@ -73,6 +73,8 @@ def plot_dataset(dataset):
     else:
         timesteps = xrange(steps)
 
+    print timesteps
+
     dims = [int(d) for d in args.dims.split('x')]
     if reduce(lambda x,y: x*y, dims, 1) != ranks:
         die("Product of dimensions must equal number of ranks.")
@@ -82,9 +84,12 @@ def plot_dataset(dataset):
     vmin = dataset.value.min()
     vmax = dataset.value.max()
 
+    print vmin, vmax
+    print dataset.value
+
     fig = plt.figure()
     for i, arr in enumerate(step_arrays):
-        ax = fig.add_subplot(1, len(step_arrays), i)
+        ax = fig.add_subplot(1, len(step_arrays), i + 1, str(i))
         heat_map(ax, arr, cm.Blues, vmin, vmax)
 
     fig.canvas.set_window_title(dataset.name)
