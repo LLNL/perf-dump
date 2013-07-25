@@ -89,7 +89,7 @@ def plot_dataset(dataset):
 
     fig = plt.figure()
     for i, arr in enumerate(step_arrays):
-        ax = fig.add_subplot(1, len(step_arrays), i+1, title="step " + str(i))
+        ax = fig.add_subplot(1, len(step_arrays), i+1, title="step " + str(timesteps[i]))
         heat_map(ax, arr, cm.Blues, vmin, vmax)
 
     fig.canvas.set_window_title(dataset.name)
