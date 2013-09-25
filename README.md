@@ -18,6 +18,20 @@ If you do not set the CMAKE_PREFIX_PATH like this, FindHDF5 seems to prefer
 the builtin sequential HDF5 (i.e., no MPI), so you should be sure to set
 the HDF5 prefix this way.  PAPI should also be found automatically.
 
+Building on BG/Q
+-----------------
+For BlueGene builds, you need to use a toolchain file and you need a version
+of CMake with BlueGene/Q support.  We provide toolchain files that tell CMake about
+the BlueGene/Q cross-compilers.  They are in cmake/toolchains.  To build on BG with
+GNU compilers, build like this:
+
+    HDF5=/usr/local/tools/hdf5/hdf5-1.8.5/parallel
+    export CMAKE_PREFIX_PATH=$HDF5
+    cmake \
+        -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchains/BlueGeneQ-xl.cmake \
+        -DPAPI_PREFIX=/usr/local/tools/papi \
+        ..
+
 Usage
 -----------------
 

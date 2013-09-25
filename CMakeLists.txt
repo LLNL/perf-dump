@@ -17,7 +17,7 @@ set(PERF_DUMP_SRCS perf_dump.C papi_utils.C)
 
 add_library(perfdump SHARED ${PERF_DUMP_SRCS})
 target_link_libraries(perfdump
-  ${MPI_LIBRARIES} adept_utils papi hdf5)
+  ${MPI_LIBRARIES} adept_utils ${PAPI_LIBRARIES} ${HDF5_LIBRARIES})
 
 add_wrapped_file(pmpi_perf_dump.C pmpi_perf_dump.w)
 
@@ -29,12 +29,12 @@ target_link_libraries(pnmpi_perfdump)
 
 add_executable(test-perf-dump test_perf_dump.C)
 target_link_libraries(test-perf-dump
-  papi ${MPI_LIBRARIES} perfdump ${HDF5_LIBRARIES})
+  ${PAPI_LIBRARIES} perfdump ${HDF5_LIBRARIES} ${MPI_LIBRARIES})
 
 add_executable(test-perf-dump-pmpi test_perf_dump_pmpi.C)
 target_link_libraries(test-perf-dump-pmpi
-  pmpi_perfdump_static papi
-  ${MPI_LIBRARIES} ${HDF5_LIBRARIES} adept_utils)
+  pmpi_perfdump_static ${PAPI_LIBRARIES}
+  ${HDF5_LIBRARIES} adept_utils ${MPI_LIBRARIES})
 
 include_directories(
   ${MPI_INCLUDE_PATH}
