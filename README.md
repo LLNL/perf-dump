@@ -1,8 +1,10 @@
-Performance Dump Module (perf_dump)
+Performance Dump Module (perf-dump)
 ============================================
 
 `libperfdump` is a tool for collecting counter data from all processes in a
 cluster and dumping counter values out to an HDF5 file with parallel I/O.
+
+by Todd Gamblin, tgamblin@llnl.gov.
 
 Building
 -----------------
@@ -216,3 +218,9 @@ The third is for PnMPI, and can be loaded as a PnMPI module.
 
 
 
+Release
+-------------
+
+perf-dump is released under an LGPL license. For more details see the LICENSE file.
+
+`LLNL-CODE-647187`
