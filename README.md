@@ -8,30 +8,30 @@ by Todd Gamblin, tgamblin@llnl.gov.
 
 Building
 -----------------
-Building with CMake is very simple, but you will need PAPI and HDF5. These
-are installed on the LLNL Linux clusters.  Try this:
+Building with CMake is very simple, but you will need wrap.py, PAPI and HDF5.
+These are installed on the LLNL Linux clusters. Try this:
 
-    HDF5=/usr/local/tools/hdf5-gnu-parallel-1.8.10
+    export HDF5=/usr/local/tools/hdf5-intel-parallel-mvapich2-1.8.16
     export CMAKE_PREFIX_PATH=$HDF5
-    cmake -DPAPI_PREFIX=/usr/local/tools/papi  ..
+    cmake -DWRAP_DIR=<path-to-wrap> -DPAPI_PREFIX=/usr/local/tools/papi  ..
     make
 
 If you do not set the CMAKE_PREFIX_PATH like this, FindHDF5 seems to prefer
 the builtin sequential HDF5 (i.e., no MPI), so you should be sure to set
 the HDF5 prefix this way.  PAPI should also be found automatically.
 
-Building on BG/Q
+Building on Blue Gene/Q
 -----------------
-For BlueGene builds, you need to use a toolchain file and you need a version
-of CMake with BlueGene/Q support.  We provide toolchain files that tell CMake about
-the BlueGene/Q cross-compilers.  They are in cmake/toolchains.  To build on BG with
-GNU compilers, build like this:
+For Blue Gene builds, you need to use a toolchain file and you need a version
+of CMake with Blue Gene/Q support.  We provide toolchain files that tell CMake
+about the Blue Gene/Q cross-compilers.  They are in cmake/toolchains.  To build
+on Blue Gene with GNU compilers, build like this:
 
     HDF5=/usr/local/tools/hdf5/hdf5-1.8.5/parallel
     export CMAKE_PREFIX_PATH=$HDF5
     cmake \
         -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchains/BlueGeneQ-xl.cmake \
-        -DPAPI_PREFIX=/usr/local/tools/papi \
+        -DWRAP_DIR=<path-to-wrap> -DPAPI_PREFIX=/usr/local/tools/papi \
         ..
 
 Usage
