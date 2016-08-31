@@ -290,4 +290,35 @@ EXTERN_C void pdump_finalize() {
   }
 }
 
+// Wrapper functions for fortran binding
+EXTERN_C void pdump_init_() {
+  pdump_init();
+}
 
+EXTERN_C void pdump_init__() {
+  pdump_init();
+}
+
+EXTERN_C void pdump_start_step_() {
+  pdump_start_step();
+}
+
+EXTERN_C void pdump_start_step__() {
+  pdump_start_step();
+}
+
+EXTERN_C void pdump_end_step_() {
+  pdump_end_step();
+}
+
+EXTERN_C void pdump_end_step__() {
+  pdump_end_step();
+}
+
+EXTERN_C void pdump_finalize_() {
+  pdump_finalize();
+}
+
+EXTERN_C void pdump_finalize__() {
+  pdump_finalize();
+}
