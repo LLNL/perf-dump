@@ -100,7 +100,7 @@ static string get_dump_file(const string& name) {
     if (!dump_dir_str.empty()) {
       filename << dump_dir_str;
       size_t back = dump_dir_str.size() - 1;
-      if (!dump_dir_str[back] == '/') {
+      if (dump_dir_str[back] != '/') {
         filename << "/";
       }
     }
