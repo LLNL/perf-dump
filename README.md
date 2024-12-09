@@ -221,6 +221,9 @@ The third is for PnMPI, and can be loaded as a PnMPI module.
 Release
 -------------
 
-perf-dump is released under an LGPL license. For more details see the LICENSE file.
+`perf-dump` is released under the Apache-2.0 license with LLVM exceptions. For more
+details see the `LICENSE` file.
 
-`LLNL-CODE-647187`
+SPDX-License-Identifier: Apache-2.0 WITH LLVM-Exception
+
+`LLNL-CODE-2001501`

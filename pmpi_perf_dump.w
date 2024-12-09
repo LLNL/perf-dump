@@ -1,4 +1,9 @@
-/* -*- C++ -*- */
+/* -*- C++ -*-
+Copyright 2013-2024 Lawrence Livermore National Security, LLC and other
+perf-dump Developers. See the top-level LICENSE file for details.
+
+SPDX-License-Identifier: Apache-2.0 WITH LLVM-Exception
+*/
 #include <mpi.h>
 #include <iostream>
 #include "perf_dump.h"
